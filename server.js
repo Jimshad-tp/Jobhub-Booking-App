@@ -1,6 +1,8 @@
+
+require('dotenv').config()
 const express = require('express')
 const app = express()
-require('dotenv').config()
+
 const dbConfig = require ("./confiq/dbConfig")
 app.use(express.json())
 const userRoute = require('./routes/userRoute')
