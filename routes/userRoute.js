@@ -3,8 +3,10 @@ const router = express.Router();
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
-
+const Application = require('../models/applicationModel')
 const authMiddleware = require("../middilewares/authMiddleware");
+const { application } = require("express");
+
 
 router.post("/register", async (req, res) => {
   try {
@@ -24,9 +26,6 @@ router.post("/register", async (req, res) => {
     res.status(500).send({ message: "Error Creating user", success: false });
   }
 });
-
-
-
 
 router.post("/login", async (req, res) => {
 
@@ -54,25 +53,34 @@ router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
   try {
 
     const user = await User.findOne({ _id: req.body.userId })
+    const password = undefined
     if (!user) {
       return res
-      .status(200)
-      .send({ message: "User does not exist", success: false })
+        .status(200)
+        .send({ message: "User does not exist", success: false })
     } else {
-      return res
-      .status(200).send({
-        success: true,
-         data: {
-          name: user.name,
-          email: user.email
-        },
-      })
+
+      const Applicaton = await Application.findOne({ userId: req.body.userId })
+      return res.status(200).send({success: true,data: user , Application})
     }
   } catch (error) {
-    console.log('errrrrrrrrrrr');
+
     console.log(error)
     res.status(500).send({ message: "Error getting user info", success: false, error })
   }
-})
+});
+
+router.post("/form", async (req, res) => {
+  try {
+    const formData = new Application(req.body)
+    await formData.save()
+res.status(200).send({message : "Application Registered",success : true})
+
+
+  } catch (error) {
+    res.status(500).send({ message: "Error getting user info", success: false, error })
+    console.log(error);
+  }
+});
 
 module.exports = router;
