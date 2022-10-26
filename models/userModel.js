@@ -17,8 +17,11 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false,
         required:true
-    }
- 
+    },
+ status:{
+    type:String,
+    default:'active'
+ }
 },{timestamps:true})
 
 module.exports = mongoose.model("Users",userSchema)

@@ -25,7 +25,7 @@ const applicationSchema = new mongoose.Schema({
         type: String
     },
 
-    Problem: {
+    problem: {
         type: String
     },
     uniqueSolution: {
@@ -33,7 +33,7 @@ const applicationSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "Submitted"
+        default: "pending"
     },
     userId: {
         type: mongoose.Types.ObjectId,
