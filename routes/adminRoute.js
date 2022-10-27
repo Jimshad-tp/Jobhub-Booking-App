@@ -19,7 +19,7 @@ router.get("/get-all-users", authMiddleware, async (req, res) => {
   }
 });
 
-router.post("/app-approve", async (req, res) => {
+router.post("/change-user-status", async (req, res) => {
   try {
 
     const { _id, status } = req.body;
@@ -27,13 +27,31 @@ router.post("/app-approve", async (req, res) => {
       status,
     })
 
-    return res.status(200).send({ message: "user application approved", success: true, data: user })
+    return res.status(200).send({ message: "user status changed", success: true, data: user })
 
 
   } catch (error) {
 
     console.log(error)
-    res.status(500).send({ message: "Error applicaton approving", success: false, error })
+    res.status(500).send({ message: "Error user does not changed", success: false, error })
+  }
+});
+
+router.post("/change-form-status", async (req, res) => {
+  try {
+
+    const { _id, status } = req.body;
+    const apps = await Application.findByIdAndUpdate(_id, {
+      status,
+    })
+
+    return res.status(200).send({ message: "user application form approved", success: true, data: apps })
+
+
+  } catch (error) {
+
+    console.log(error)
+    res.status(500).send({ message: "Error applying user form", success: false, error })
   }
 });
 

@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken')
 const Application = require('../models/applicationModel')
 const authMiddleware = require("../middilewares/authMiddleware");
 const Slot = require("../models/slotModel")
-const { application } = require("express");
 
 
 router.post("/register", async (req, res) => {
@@ -62,7 +61,7 @@ router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
     } else {
 
       const Applicaton = await Application.findOne({ userId: req.body.userId })
-      return res.status(200).send({success: true,data: user , Application})
+      return res.status(200).send({ success: true, data: user, Application })
     }
   } catch (error) {
 
@@ -73,9 +72,9 @@ router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
 
 router.post("/form", async (req, res) => {
   try {
-    const formData = new Application(req.body)
-    await formData.save()
-res.status(200).send({message : "Application Registered",success : true})
+    const newForm = new Application({...req.body , status : "pending"})
+    await newForm.save()
+    res.status(200).send({ message: "Application Registered", success: true })
 
 
   } catch (error) {
@@ -84,6 +83,18 @@ res.status(200).send({message : "Application Registered",success : true})
   }
 });
 
+router.post("/get-one-apps", async (req, res) => {
+  try {
+
+    const applications = await Application.findOne({userId:req.body.userId})
+
+    res.status(200).send({ message: "application data fetched successfully", success: true, data: applications })
+  } catch (error) {
+
+    console.log(error)
+    res.status(500).send({ message: "Error getting user info", success: false, error })
+  }
+});
 
 
 
