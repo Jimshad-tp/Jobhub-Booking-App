@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require("../models/userModel");
 const authMiddleware = require("../middilewares/authMiddleware");
 const Application = require('../models/applicationModel')
+const Slot = require('../models/slotModel')
 
 
 router.get("/get-all-users", authMiddleware, async (req, res) => {
@@ -40,7 +41,7 @@ router.get("/get-all-apps", async (req, res) => {
   try {
 
     const applications = await Application.find({})
-console.log(applications)
+    console.log(applications)
     res.status(200).send({ message: "application data fetched successfully", success: true, data: applications })
   } catch (error) {
 
@@ -48,5 +49,34 @@ console.log(applications)
     res.status(500).send({ message: "Error getting user info", success: false, error })
   }
 });
+
+router.post("/slot", async (req, res) => {
+  try {
+    const addSlot = new Slot(req.body)
+    await addSlot.save()
+    console.log(addSlot);
+    res.status(200).send({ message: "Slot added successfully", success: true })
+
+
+  } catch (error) {
+    res.status(500).send({ message: "Error getting slot adding process", success: false, error })
+    console.log(error);
+  }
+});
+
+router.get("/getslot", async (req, res) => {
+  try {
+    const slotlist =  await Slot.find({})
+  
+
+    res.status(200).send({ message: "fetch slot successfully", success: true, data:slotlist })
+
+
+  } catch (error) {
+    res.status(500).send({ message: "Error fetching slots", success: false, error })
+    console.log(error);
+  }
+});
+
 
 module.exports = router;

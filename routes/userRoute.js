@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
 const Application = require('../models/applicationModel')
 const authMiddleware = require("../middilewares/authMiddleware");
+const Slot = require("../models/slotModel")
 const { application } = require("express");
 
 
@@ -82,5 +83,8 @@ res.status(200).send({message : "Application Registered",success : true})
     console.log(error);
   }
 });
+
+
+
 
 module.exports = router;
