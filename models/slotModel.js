@@ -12,9 +12,9 @@ const slotSchema = new mongoose.Schema({
     },
    
     status: {
-        type:Boolean,
-        default:false,
-        required:true
+        type:String,
+        default:'available',
+       
     },
  appplicationId:{
     type:mongoose.Types.ObjectId,
