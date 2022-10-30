@@ -8,12 +8,9 @@ const Slot = require('../models/slotModel')
 
 router.get("/get-all-users", authMiddleware, async (req, res) => {
   try {
-
     const users = await User.find({})
-
     res.status(200).send({ message: "users data fetched successfully", success: true, data: users })
   } catch (error) {
-
     console.log(error)
     res.status(500).send({ message: "Error getting user info", success: false, error })
   }
@@ -26,10 +23,7 @@ router.post("/change-user-status", async (req, res) => {
     const user = await User.findByIdAndUpdate(_id, {
       status,
     })
-
     return res.status(200).send({ message: "user status changed", success: true, data: user })
-
-
   } catch (error) {
 
     console.log(error)
@@ -46,8 +40,6 @@ router.post("/change-form-status", async (req, res) => {
     })
 
     return res.status(200).send({ message: "user application form approved", success: true, data: apps })
-
-
   } catch (error) {
 
     console.log(error)
@@ -62,7 +54,6 @@ router.get("/get-all-apps", async (req, res) => {
     console.log(applications)
     res.status(200).send({ message: "application data fetched successfully", success: true, data: applications })
   } catch (error) {
-
     console.log(error)
     res.status(500).send({ message: "Error getting user info", success: false, error })
   }
@@ -74,8 +65,6 @@ router.post("/slot", async (req, res) => {
     await addSlot.save()
     console.log(addSlot);
     res.status(200).send({ message: "Slot added successfully", success: true })
-
-
   } catch (error) {
     res.status(500).send({ message: "Error getting slot adding process", success: false, error })
     console.log(error);
@@ -85,16 +74,41 @@ router.post("/slot", async (req, res) => {
 router.get("/getslot", async (req, res) => {
   try {
     const slotlist =  await Slot.find({})
-  
-
     res.status(200).send({ message: "fetch slot successfully", success: true, data:slotlist })
-
-
   } catch (error) {
     res.status(500).send({ message: "Error fetching slots", success: false, error })
     console.log(error);
   }
 });
 
+router.get("/getapps", async (req, res) => {
+  try {
+
+    const apps =  await Application.find({status: 'approved', slot:null})
+    res.status(200).send({ message: "fetch applications successfully", success: true, data:apps })
+  } catch (error) {
+    res.status(500).send({ message: "Error fetching applications", success: false, error })
+    console.log(error);
+  }
+});
+
+router.post("/slotbook", async (req, res) => {
+  try {
+    const appId = req.body.appId
+    const slotId = req.body.slotId
+    const apps = await Application.findByIdAndUpdate(appId,{
+      slot :slotId
+    })
+    await apps.save()
+    const slot= await Slot.findByIdAndUpdate(slotId,{
+      status :'Booked'
+    })
+    console.log(slot);
+    res.status(200).send({ message: "Slot Booking successfully", success: true })
+  } catch (error) {
+    res.status(500).send({ message: "Error getting slot Booking process", success: false, error })
+    console.log(error);
+  }
+});
 
 module.exports = router;

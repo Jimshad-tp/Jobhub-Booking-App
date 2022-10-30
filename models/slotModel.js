@@ -8,12 +8,12 @@ const slotSchema = new mongoose.Schema({
     no:{
         type:Number,
         required:true,
-        unique:true
+
     },
    
     status: {
         type:String,
-        default:'available',
+        default:'Available',
        
     },
  appplicationId:{

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const applicationSchema = new mongoose.Schema({
+    
     name: {
         type: String,
         required: true
@@ -21,23 +22,27 @@ const applicationSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    companyname: {
+    subject: {
         type: String
     },
 
-    problem: {
+    qualification: {
         type: String
     },
-    uniqueSolution: {
+    experience: {
         type: String
     },
     status: {
         type: String,
         default: "pending"
     },
+    slot: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Slots'
+    },
     userId: {
         type: mongoose.Types.ObjectId,
-        ref: 'User'
+        ref: 'Users'
     },
 
 

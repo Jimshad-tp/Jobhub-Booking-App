@@ -51,7 +51,6 @@ router.post("/login", async (req, res) => {
 
 router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
   try {
-
     const user = await User.findOne({ _id: req.body.userId })
     const password = undefined
     if (!user) {
@@ -59,7 +58,6 @@ router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
         .status(200)
         .send({ message: "User does not exist", success: false })
     } else {
-
       const Applicaton = await Application.findOne({ userId: req.body.userId })
       return res.status(200).send({ success: true, data: user, Application })
     }
@@ -70,24 +68,21 @@ router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
   }
 });
 
-router.post("/form", async (req, res) => {
+router.post("/form", authMiddleware, async (req, res) => {
   try {
-    const newForm = new Application({...req.body , status : "pending"})
+    const newForm = new Application({ ...req.body })
     await newForm.save()
     res.status(200).send({ message: "Application Registered", success: true })
-
-
   } catch (error) {
     res.status(500).send({ message: "Error getting user info", success: false, error })
     console.log(error);
   }
 });
 
-router.post("/get-one-apps", async (req, res) => {
+router.post("/get-one-apps", authMiddleware, async (req, res) => {
   try {
-
-    const applications = await Application.findOne({userId:req.body.userId})
-
+    const userId = req.body.userId
+    const applications = await Application.find({ userId }).populate('slot').exec()
     res.status(200).send({ message: "application data fetched successfully", success: true, data: applications })
   } catch (error) {
 
