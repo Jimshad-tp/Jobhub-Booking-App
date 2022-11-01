@@ -51,7 +51,6 @@ router.get("/get-all-apps", async (req, res) => {
   try {
 
     const applications = await Application.find({})
-    console.log(applications)
     res.status(200).send({ message: "application data fetched successfully", success: true, data: applications })
   } catch (error) {
     console.log(error)
@@ -63,7 +62,7 @@ router.post("/slot", async (req, res) => {
   try {
     const addSlot = new Slot(req.body)
     await addSlot.save()
-    console.log(addSlot);
+   
     res.status(200).send({ message: "Slot added successfully", success: true })
   } catch (error) {
     res.status(500).send({ message: "Error getting slot adding process", success: false, error })
@@ -83,19 +82,21 @@ router.get("/getslot", async (req, res) => {
 
 router.get("/getapps", async (req, res) => {
   try {
-
-    const apps =  await Application.find({status: 'approved', slot:null})
-    res.status(200).send({ message: "fetch applications successfully", success: true, data:apps })
+    const apps =  await Application.find({status: 'Approved', slot:null})
+    res.status(200).write({ message: "fetch applications successfully", success: true, data:apps })
   } catch (error) {
     res.status(500).send({ message: "Error fetching applications", success: false, error })
     console.log(error);
   }
 });
 
+
 router.post("/slotbook", async (req, res) => {
   try {
     const appId = req.body.appId
     const slotId = req.body.slotId
+    console.log(appId);
+    console.log(slotId);
     const apps = await Application.findByIdAndUpdate(appId,{
       slot :slotId
     })
@@ -103,7 +104,7 @@ router.post("/slotbook", async (req, res) => {
     const slot= await Slot.findByIdAndUpdate(slotId,{
       status :'Booked'
     })
-    console.log(slot);
+
     res.status(200).send({ message: "Slot Booking successfully", success: true })
   } catch (error) {
     res.status(500).send({ message: "Error getting slot Booking process", success: false, error })

@@ -34,7 +34,7 @@ const applicationSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "pending"
+        default: "Pending"
     },
     slot: {
         type: mongoose.Types.ObjectId,
