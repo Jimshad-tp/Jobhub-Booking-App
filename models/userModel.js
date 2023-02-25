@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
  status:{
     type:String,
     default:'Active'
+ },
+ time:{
+    type:String,
+    default:null
  }
 },{timestamps:true})
 

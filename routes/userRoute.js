@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const Application = require('../models/applicationModel')
 const authMiddleware = require("../middilewares/authMiddleware");
 const Slot = require("../models/slotModel")
+const moment = require('moment')
 
 
 router.post("/register", async (req, res) => {
@@ -30,8 +31,12 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
 
   try {
+    const myDate = new Date();
+    const time = (moment(myDate).format("hh:mm:A"));
+
+
     const user = await User.findOne({ email: req.body.email })
-    console.log(user);
+
     if (!user) {
       return res.status(200).send({ message: 'user does not exists', success: false })
     }else if (user.status === 'Active'){
@@ -42,6 +47,7 @@ router.post("/login", async (req, res) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "1d"
       });
+      const userTime = await User.findByIdAndUpdate(user.id,{time:time})
       res.status(200).send({ message: "Login successfull", success: true, data: token })
     }
   }
